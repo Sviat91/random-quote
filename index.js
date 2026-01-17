@@ -8,29 +8,40 @@ const favoritesContainer = document.getElementById('favorites-container');
 
 let currentQuoteIndex;
 
+function updateFavoriteButton() {
+  toggleFavoriteBtn.textContent = quotes[currentQuoteIndex].isFavorite
+    ? 'Remove from favorites'
+    : 'Add to favorites';
+}
+
 function generateRandomQuote() {
   currentQuoteIndex = Math.floor(Math.random() * quotes.length);
   const randomQuote = quotes[currentQuoteIndex];
   quoteElement.textContent = randomQuote.quote;
   authorElement.textContent = randomQuote.author;
-  toggleFavoriteBtn.textContent = randomQuote.isFavorite
-    ? 'Remove from favorites'
-    : 'Add to favorites';
+  updateFavoriteButton();
+  toggleFavoriteBtn.style.display = 'inline-block';
 }
 
-function toggleFavotite() {
+function toggleFavorite() {
   const currentQuote = quotes[currentQuoteIndex];
   currentQuote.isFavorite = !currentQuote.isFavorite;
-  toggleFavoriteBtn.textContent = currentQuote.isFavorite
-    ? 'Remove from favorites'
-    : 'Add to favorites';
+  updateFavoriteButton();
   if (currentQuote.isFavorite) {
     const favoriteCard = document.createElement('div');
     favoriteCard.classList.add('favorite-card');
     favoriteCard.innerHTML = `
       <p>${currentQuote.quote}</p> 
-      <p class="author>${currentQuote.author}</p>`;
+      <p class="author">${currentQuote.author}</p>
+      <button class="delete-btn">❌</button>`;
+
     favoritesContainer.appendChild(favoriteCard);
+    const deleteBtn = favoriteCard.querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', () => {
+      favoriteCard.remove();
+      currentQuote.isFavorite = false;
+      updateFavoriteButton();
+    });
   } else {
     const favoriteCards = document.querySelectorAll('.favorite-card');
     favoriteCards.forEach((card) => {
@@ -42,4 +53,6 @@ function toggleFavotite() {
 }
 
 generateBtn.addEventListener('click', generateRandomQuote);
-toggleFavoriteBtn.addEventListener('click', toggleFavotite);
+toggleFavoriteBtn.addEventListener('click', toggleFavorite);
+
+generateRandomQuote();
