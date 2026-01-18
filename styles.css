@@ -71,3 +71,10 @@ body {
 #favorite-btn {
   display: none;
 }
+
+.fa-regular {
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  cursor: pointer;
+}
