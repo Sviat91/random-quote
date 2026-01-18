@@ -1,7 +1,6 @@
 function updateFavoriteButton(element, isFavorite) {
-  element.textContent = isFavorite
-    ? 'Remove from favorites'
-    : 'Add to favorites';
+  element.classList.toggle('fa-solid', isFavorite);
+  element.classList.toggle('fa-regular', !isFavorite);
 }
 
 export default updateFavoriteButton;
