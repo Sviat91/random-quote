@@ -1,5 +1,9 @@
-import quotes from './quotes.js';
-import updateFavoriteButton from './functions/updateFavoriteButton.js';
+import quotes from './src/quotes.js';
+import {
+  updateFavoriteButton,
+  showFavoriteCard,
+  hideFavoriteCard,
+} from './src/favoritesHandler.js';
 
 const quoteElement = document.getElementById('quote');
 const generateBtn = document.getElementById('generate-btn');
@@ -22,28 +26,16 @@ function toggleFavorite() {
   const currentQuote = quotes[currentQuoteIndex];
   currentQuote.isFavorite = !currentQuote.isFavorite;
   updateFavoriteButton(toggleFavoriteBtn, currentQuote.isFavorite);
-  if (currentQuote.isFavorite) {
-    const favoriteCard = document.createElement('div');
-    favoriteCard.classList.add('favorite-card');
-    favoriteCard.innerHTML = `
-      <p>${currentQuote.quote}</p> 
-      <p class="author">${currentQuote.author}</p>
-      <button class="delete-btn">❌</button>`;
 
-    favoritesContainer.appendChild(favoriteCard);
-    const deleteBtn = favoriteCard.querySelector('.delete-btn');
-    deleteBtn.addEventListener('click', () => {
-      favoriteCard.remove();
-      currentQuote.isFavorite = false;
-      updateFavoriteButton(toggleFavoriteBtn, currentQuote.isFavorite);
-    });
+  if (currentQuote.isFavorite) {
+    showFavoriteCard(
+      currentQuote,
+      favoritesContainer,
+      toggleFavoriteBtn,
+      (quoteToDelete) => quoteToDelete === quotes[currentQuoteIndex],
+    );
   } else {
-    const favoriteCards = document.querySelectorAll('.favorite-card');
-    favoriteCards.forEach((card) => {
-      if (card.textContent.includes(currentQuote.quote)) {
-        card.remove();
-      }
-    });
+    hideFavoriteCard(currentQuote.quote);
   }
 }
 
