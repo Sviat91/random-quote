@@ -68,10 +68,6 @@ body {
   font-style: italic;
 }
 
-#favorite-btn {
-  display: none;
-}
-
 .button-wrapper {
   position: relative;
   display: inline-block;

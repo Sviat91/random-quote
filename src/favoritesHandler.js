@@ -1,18 +1,44 @@
-function updateFavoriteButton(element, isFavorite) {
-  element.classList.toggle('fa-solid', isFavorite);
-  element.classList.toggle('fa-regular', !isFavorite);
+import { currentQuote } from '../index.js';
+const toggleFavoriteBtn = document.getElementById('favorite-btn');
+const favoritesContainer = document.getElementById('favorites-container');
+toggleFavoriteBtn.addEventListener('click', toggleFavorite);
+
+hideFavoriteBnt();
+
+function handleFavorite(isFavorite) {
+  showFavoriteBnt();
+  updateFavoriteButton(isFavorite);
 }
 
-function showFavoriteCard(
-  quote,
-  favoritesContainer,
-  toggleFavoriteBtn,
-  checkIfActive,
-) {
+function toggleFavorite() {
+  currentQuote.isFavorite = !currentQuote.isFavorite;
+  handleFavorite(currentQuote.isFavorite);
+
+  if (currentQuote.isFavorite) {
+    showFavoriteCard(currentQuote, favoritesContainer);
+  } else {
+    hideFavoriteCard(currentQuote.text);
+  }
+}
+
+function updateFavoriteButton(isFavorite) {
+  toggleFavoriteBtn.classList.toggle('fa-solid', isFavorite);
+  toggleFavoriteBtn.classList.toggle('fa-regular', !isFavorite);
+}
+
+function showFavoriteBnt() {
+  toggleFavoriteBtn.style.display = 'inline-block';
+}
+
+function hideFavoriteBnt() {
+  toggleFavoriteBtn.style.display = 'none';
+}
+
+function showFavoriteCard(quote, favoritesContainer) {
   const favoriteCard = document.createElement('div');
   favoriteCard.classList.add('favorite-card');
   favoriteCard.innerHTML = `
-      <p>${quote.quote}</p> 
+      <p>${quote.text}</p> 
       <p class="author">${quote.author}</p>
       <button class="delete-btn">❌</button>`;
 
@@ -21,9 +47,8 @@ function showFavoriteCard(
   deleteBtn.addEventListener('click', () => {
     favoriteCard.remove();
     quote.isFavorite = false;
-    const isCurrent = checkIfActive(quote);
-    if (isCurrent) {
-      updateFavoriteButton(toggleFavoriteBtn, quote.isFavorite);
+    if (quote === currentQuote) {
+      updateFavoriteButton(quote.isFavorite);
     }
   });
 }
@@ -37,4 +62,11 @@ function hideFavoriteCard(quote) {
   });
 }
 
-export { updateFavoriteButton, showFavoriteCard, hideFavoriteCard };
+export {
+  handleFavorite,
+  updateFavoriteButton,
+  showFavoriteCard,
+  hideFavoriteCard,
+  showFavoriteBnt,
+  hideFavoriteBnt,
+};
