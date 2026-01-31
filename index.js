@@ -1,5 +1,8 @@
 import quotes from './src/quotes.js';
-import { displayQuote, choseRandomQuote } from './src/quotesHandler.js';
+import {
+  displayQuote,
+  choseRandomQuote,
+} from './src/handlers/quotesHandler.js';
 
 const generateBtn = document.getElementById('generate-btn');
 generateBtn.addEventListener('click', generateQuoteHandler);

@@ -1,5 +1,5 @@
 import { handleFavorite } from './favoritesHandler.js';
-import { generateRandomInt } from './utils.js';
+import { generateRandomInt } from '../utils.js';
 
 function displayQuote(quote) {
   const { text, author, isFavorite } = quote;
