@@ -62,11 +62,4 @@ function hideFavoriteCard(quote) {
   });
 }
 
-export {
-  handleFavorite,
-  updateFavoriteButton,
-  showFavoriteCard,
-  hideFavoriteCard,
-  showFavoriteBnt,
-  hideFavoriteBnt,
-};
+export { handleFavorite };
