@@ -1,18 +1,15 @@
-import quotes from './src/quotes.js';
-import {
-  displayQuote,
-  choseRandomQuote,
-} from './src/handlers/quotesHandler.js';
-
-const generateBtn = document.getElementById('generate-btn');
-generateBtn.addEventListener('click', generateQuoteHandler);
+import quotes from './src/data/quotes.js';
+import { generateQuoteHandler } from './src/handlers/quotesHandler.js';
 
 let currentQuote = null;
 
-function generateQuoteHandler() {
-  const randomQuote = choseRandomQuote(quotes);
-  currentQuote = randomQuote;
-  displayQuote(randomQuote);
+function setCurrentQuote(quote) {
+  currentQuote = quote;
 }
+
+const generateBtn = document.getElementById('generate-btn');
+generateBtn.addEventListener('click', () =>
+  generateQuoteHandler(quotes, setCurrentQuote),
+);
 
 export { currentQuote };
