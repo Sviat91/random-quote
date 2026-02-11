@@ -25,7 +25,10 @@ body {
 }
 
 .quote {
+  font-size: 1.3em;
   font-style: italic;
+  min-height: 2.3em;
+  margin-block-end: 0.7em;
 }
 
 .quote::before,
@@ -64,7 +67,7 @@ body {
   transform: scale(1.3);
 }
 
-.author {
+.favorite-card-author {
   font-style: italic;
 }
 

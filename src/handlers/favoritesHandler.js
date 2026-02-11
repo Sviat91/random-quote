@@ -37,7 +37,7 @@ function showFavoriteCard(quote, favoritesContainer) {
   favoriteCard.dataset.quoteId = id;
   favoriteCard.innerHTML = `
       <p>${text}</p> 
-      <p class="author">${author}</p>
+      <p class="favorite-card-author">${author}</p>
       <button class="delete-btn">❌</button>`;
 
   favoritesContainer.appendChild(favoriteCard);
