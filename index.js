@@ -10,10 +10,10 @@ let currentQuote = null;
 const favoriteBtn = document.getElementById('favorite-btn');
 const favoritesContainer = document.getElementById('favorites-container');
 
-hideFavoriteBnt(favoriteBtn);
+hideFavoriteBnt();
 
 favoriteBtn.addEventListener('click', () =>
-  toggleFavorite(currentQuote, favoriteBtn, favoritesContainer),
+  toggleFavorite(currentQuote, favoritesContainer),
 );
 
 function setCurrentQuote(quote) {
@@ -25,4 +25,4 @@ generateBtn.addEventListener('click', () =>
   generateQuoteHandler(quotes, setCurrentQuote),
 );
 
-export { currentQuote, favoriteBtn };
+export { favoriteBtn };
