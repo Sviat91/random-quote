@@ -1,7 +1,8 @@
 import { favoriteBtn } from '../../index.js';
 
-function toggleFavorite(quote, container) {
-  quote.isFavorite = !quote.isFavorite;
+function toggleFavorite(quote, setCurrentQuote, container) {
+  const shouldToggleFavorite = true;
+  setCurrentQuote(quote, shouldToggleFavorite);
   handleFavorite(quote.isFavorite);
 
   if (quote.isFavorite) {
@@ -58,4 +59,4 @@ function hideFavoriteCard(id) {
   }
 }
 
-export { handleFavorite, toggleFavorite, hideFavoriteBnt };
+export { handleFavorite, toggleFavorite, hideFavoriteBnt, showFavoriteCard };
