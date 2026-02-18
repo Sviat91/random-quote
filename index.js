@@ -47,7 +47,7 @@ favoriteBtn.addEventListener('click', () =>
 
 const generateBtn = document.getElementById('generate-btn');
 generateBtn.addEventListener('click', () =>
-  generateQuoteHandler(quotes, setCurrentQuote),
+  generateQuoteHandler(quotes, favoriteQuotes, setCurrentQuote),
 );
 
 function init() {
@@ -59,9 +59,12 @@ function init() {
     currentQuote = quote;
   }
   const favoriteQutosFromStorage = getItem(FAVORITE_QUOTE_KEY);
-  favoriteQutosFromStorage.forEach((quote) =>
-    showFavoriteCard(quote, favoritesContainer),
-  );
+  if (favoriteQutosFromStorage) {
+    favoriteQutosFromStorage.forEach((quote) => {
+      showFavoriteCard(quote, favoritesContainer, setCurrentQuote);
+      favoriteQuotes.push(quote);
+    });
+  }
 }
 
 window.addEventListener('load', init);
