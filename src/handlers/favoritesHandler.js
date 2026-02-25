@@ -1,24 +1,27 @@
 import { favoriteBtn } from '../../index.js';
 
 function toggleFavorite(quote, setCurrentQuote, container) {
-  const shouldToggleFavorite = true;
-  setCurrentQuote(quote, shouldToggleFavorite);
-  handleFavorite(quote.isFavorite);
-
   if (quote.isFavorite) {
     showFavoriteCard(quote, container, setCurrentQuote);
   } else {
     hideFavoriteCard(quote.id);
-    handleFavorite(quote.isFavorite);
   }
 }
 
-function handleFavorite(isFavorite) {
-  showFavoriteBnt();
-  updateFavoriteButton(isFavorite);
-}
+// function handleFavorite() {
+//   showFavoriteBnt();
+// //   updateFavoriteButton();
+// }
 
 function updateFavoriteButton(isFavorite) {
+  // const btn = favoriteBtn;
+  // if (btn.classList.contains('fa-solid')) {
+  //   btn.classList.remove('fa-solid');
+  //   btn.classList.add('fa-regular');
+  // } else if (btn.classList.contains('fa-regular')) {
+  //   btn.classList.remove('fa-regular');
+  //   btn.classList.add('fa-solid');
+  // }
   favoriteBtn.classList.toggle('fa-solid', isFavorite);
   favoriteBtn.classList.toggle('fa-regular', !isFavorite);
 }
@@ -32,7 +35,6 @@ function hideFavoriteBnt() {
 }
 
 function showFavoriteCard(quote, favoritesContainer, setCurrentQuote) {
-  const shouldToggleFavorite = true;
   const { id, text, author } = quote;
   const favoriteCard = document.createElement('div');
   favoriteCard.classList.add('favorite-card');
@@ -45,7 +47,7 @@ function showFavoriteCard(quote, favoritesContainer, setCurrentQuote) {
   favoritesContainer.appendChild(favoriteCard);
   const deleteBtn = favoriteCard.querySelector('.delete-btn');
   deleteBtn.addEventListener('click', () => {
-    setCurrentQuote(quote, shouldToggleFavorite);
+    setCurrentQuote({ quote: quote, shouldToggleFavorite: true });
     hideFavoriteCard(id);
   });
 }
@@ -56,8 +58,14 @@ function hideFavoriteCard(id) {
   const currentQuoteId = document.querySelector(`[data-current-quote-id]`)
     .dataset.currentQuoteId;
   if (id === +currentQuoteId) {
-    updateFavoriteButton(quote.isFavorite);
+    updateFavoriteButton(false);
   }
 }
 
-export { handleFavorite, toggleFavorite, hideFavoriteBnt, showFavoriteCard };
+export {
+  toggleFavorite,
+  hideFavoriteBnt,
+  showFavoriteCard,
+  updateFavoriteButton,
+  showFavoriteBnt,
+};
