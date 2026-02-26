@@ -1,10 +1,12 @@
 import { favoriteBtn } from '../../index.js';
 
-function toggleFavorite(quote, setCurrentQuote, container) {
+function toggleFavorite(quote, container) {
   if (quote.isFavorite) {
-    showFavoriteCard(quote, container, setCurrentQuote);
+    showFavoriteCard(quote, container);
+    updateFavoriteButton(true);
   } else {
     hideFavoriteCard(quote.id);
+    updateFavoriteButton(false);
   }
 }
 
@@ -34,7 +36,7 @@ function hideFavoriteBnt() {
   favoriteBtn.style.display = 'none';
 }
 
-function showFavoriteCard(quote, favoritesContainer, setCurrentQuote) {
+function showFavoriteCard(quote, favoritesContainer) {
   const { id, text, author } = quote;
   const favoriteCard = document.createElement('div');
   favoriteCard.classList.add('favorite-card');
@@ -47,7 +49,7 @@ function showFavoriteCard(quote, favoritesContainer, setCurrentQuote) {
   favoritesContainer.appendChild(favoriteCard);
   const deleteBtn = favoriteCard.querySelector('.delete-btn');
   deleteBtn.addEventListener('click', () => {
-    setCurrentQuote({ quote: quote, shouldToggleFavorite: true });
+    quote.isFavorite = !quote.isFavorite;
     hideFavoriteCard(id);
   });
 }

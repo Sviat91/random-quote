@@ -21,12 +21,30 @@ const favoriteQuotes = [];
 
 function setCurrentQuote(quote, favorites) {
   currentQuote = { ...quote };
-  showFavoriteBnt();
-  if (favorites.some((el) => el.id === currentQuote.id)) {
-    console.log('Work kurva');
+  if (quote && favorites) {
+    favorites.some((el) => {
+      el.id === currentQuote.id;
+      currentQuote.isFavorite = true;
+      updateFavoriteButton(true);
+    });
   }
+  showFavoriteBnt();
   displayQuote(currentQuote);
-  setItem(CURRENT_QUOTE_KEY, quote);
+}
+function setFavorites(favorites, quote) {
+  quote.isFavorite = !quote.isFavorite;
+  toggleFavorite(currentQuote, favoritesContainer);
+  if (quote.isFavorite) {
+    favorites.push(quote);
+  } else if (!quote.isFavorite) {
+    const index = favorites.findIndex(
+      (favoriteQuote) => favoriteQuote.id === quote.id,
+    );
+    if (index !== -1) {
+      favorites.splice(index, 1);
+    }
+  }
+  console.log(favorites);
 }
 
 // function setCurrentQuote({
@@ -68,27 +86,29 @@ function setCurrentQuote(quote, favorites) {
 hideFavoriteBnt();
 
 favoriteBtn.addEventListener('click', () => {
-  setCurrentQuote({ quote: currentQuote, shouldToggleIsFavorite: true });
+  setFavorites(favoriteQuotes, currentQuote);
 });
 
 generateBtn.addEventListener('click', () =>
   setCurrentQuote(getRandomQuote(), favoriteQuotes),
 );
 
-function init() {
-  const favoriteQuoteFromStorage = getItem(FAVORITE_QUOTE_KEY);
-  if (favoriteQuoteFromStorage) {
-    favoriteQuoteFromStorage.forEach((quote) => {
-      showFavoriteCard(quote, favoritesContainer, setCurrentQuote);
-      favoriteQuotes.push(quote);
-    });
-  }
-  const currentQuoteFromStorage = getItem(CURRENT_QUOTE_KEY);
-  if (currentQuoteFromStorage) {
-    setCurrentQuote(currentQuoteFromStorage, favoriteQuoteFromStorage);
-  }
-}
+// function init() {
+//   const currentQuoteFromStorage = getItem(CURRENT_QUOTE_KEY);
+//   const favoriteQuoteFromStorage = getItem(FAVORITE_QUOTE_KEY);
+//   if (currentQuoteFromStorage) {
+//     setCurrentQuote(currentQuoteFromStorage, favoriteQuoteFromStorage);
+//   }
+//   if (favoriteQuoteFromStorage) {
+//     setFavorites(favoriteQuoteFromStorage, currentQuoteFromStorage, true);
+//   }
+// }
 
-window.addEventListener('load', init);
+// if (isfromStorage) {
+//   favorites.forEach((quote) => {
+//     showFavoriteCard(quote, favoritesContainer);
+//   });
+
+// window.addEventListener('load', init);
 
 export { favoriteBtn };
