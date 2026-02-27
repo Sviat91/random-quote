@@ -1,13 +1,13 @@
-import { favoriteBtn } from '../../index.js';
+import { favoriteBtn, setFavorites } from '../../index.js';
 
-function toggleFavorite(quote, container) {
+function toggleFavorite(quote, container, favorites) {
   if (quote.isFavorite) {
-    showFavoriteCard(quote, container);
-    updateFavoriteButton(true);
+    showFavoriteCard(quote, container, favorites);
+    updateFavoriteButton(quote.isFavorite);
   } else {
-    hideFavoriteCard(quote.id);
-    updateFavoriteButton(false);
+    hideFavoriteCard(quote.id, quote.isFavorite);
   }
+  //updateFavoriteButton(quote.isFavorite);
 }
 
 // function handleFavorite() {
@@ -36,7 +36,7 @@ function hideFavoriteBnt() {
   favoriteBtn.style.display = 'none';
 }
 
-function showFavoriteCard(quote, favoritesContainer) {
+function showFavoriteCard(quote, favoritesContainer, favorites) {
   const { id, text, author } = quote;
   const favoriteCard = document.createElement('div');
   favoriteCard.classList.add('favorite-card');
@@ -48,19 +48,18 @@ function showFavoriteCard(quote, favoritesContainer) {
 
   favoritesContainer.appendChild(favoriteCard);
   const deleteBtn = favoriteCard.querySelector('.delete-btn');
-  deleteBtn.addEventListener('click', () => {
-    quote.isFavorite = !quote.isFavorite;
-    hideFavoriteCard(id);
-  });
+  deleteBtn.addEventListener('click', () => setFavorites(favorites, quote));
 }
 
-function hideFavoriteCard(id) {
+function hideFavoriteCard(id, isFavorite) {
   const card = document.querySelector(`.favorite-card[data-quote-id="${id}"]`);
   card && card.remove();
   const currentQuoteId = document.querySelector(`[data-current-quote-id]`)
     .dataset.currentQuoteId;
   if (id === +currentQuoteId) {
     updateFavoriteButton(false);
+  } else {
+    updateFavoriteButton(isFavorite);
   }
 }
 

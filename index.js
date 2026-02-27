@@ -23,28 +23,40 @@ function setCurrentQuote(quote, favorites) {
   currentQuote = { ...quote };
   if (quote && favorites) {
     favorites.some((el) => {
-      el.id === currentQuote.id;
-      currentQuote.isFavorite = true;
-      updateFavoriteButton(true);
+      if (el.id === currentQuote.id) {
+        currentQuote.isFavorite = true;
+      }
     });
   }
+  updateFavoriteButton(currentQuote.isFavorite);
   showFavoriteBnt();
   displayQuote(currentQuote);
+  setItem(CURRENT_QUOTE_KEY, currentQuote);
 }
-function setFavorites(favorites, quote) {
-  quote.isFavorite = !quote.isFavorite;
-  toggleFavorite(currentQuote, favoritesContainer);
-  if (quote.isFavorite) {
-    favorites.push(quote);
-  } else if (!quote.isFavorite) {
-    const index = favorites.findIndex(
-      (favoriteQuote) => favoriteQuote.id === quote.id,
-    );
-    if (index !== -1) {
-      favorites.splice(index, 1);
+
+function setFavorites(favorites, quote, isFromStorage = false) {
+  if (isFromStorage) {
+    favorites.forEach((el) => {
+      showFavoriteCard(el, favoritesContainer, favorites);
+      favoriteQuotes.push(el);
+    });
+  } else {
+    quote.isFavorite = !quote.isFavorite;
+    toggleFavorite(quote, favoritesContainer, favorites);
+    if (quote.isFavorite) {
+      favorites.push(quote);
     }
+    if (!quote.isFavorite) {
+      const index = favorites.findIndex(
+        (favoriteQuote) => favoriteQuote.id === quote.id,
+      );
+      if (index !== -1) {
+        favorites.splice(index, 1);
+      }
+    }
+    setItem(FAVORITE_QUOTE_KEY, favorites);
+    setItem(CURRENT_QUOTE_KEY, quote);
   }
-  console.log(favorites);
 }
 
 // function setCurrentQuote({
@@ -93,22 +105,20 @@ generateBtn.addEventListener('click', () =>
   setCurrentQuote(getRandomQuote(), favoriteQuotes),
 );
 
-// function init() {
-//   const currentQuoteFromStorage = getItem(CURRENT_QUOTE_KEY);
-//   const favoriteQuoteFromStorage = getItem(FAVORITE_QUOTE_KEY);
-//   if (currentQuoteFromStorage) {
-//     setCurrentQuote(currentQuoteFromStorage, favoriteQuoteFromStorage);
-//   }
-//   if (favoriteQuoteFromStorage) {
-//     setFavorites(favoriteQuoteFromStorage, currentQuoteFromStorage, true);
-//   }
-// }
+function init() {
+  const currentQuoteFromStorage = getItem(CURRENT_QUOTE_KEY);
+  const favoriteQuoteFromStorage = getItem(FAVORITE_QUOTE_KEY);
+  if (currentQuoteFromStorage) {
+    setCurrentQuote(currentQuoteFromStorage, favoriteQuoteFromStorage);
+  }
+  setFavorites(favoriteQuoteFromStorage, currentQuoteFromStorage, true);
+  // if (favoriteQuoteFromStorage) {
+  //   favoriteQuoteFromStorage.forEach((quote) =>
+  //     showFavoriteCard(quote, favoritesContainer, favoriteQuoteFromStorage),
+  //   );
+  // }
+}
 
-// if (isfromStorage) {
-//   favorites.forEach((quote) => {
-//     showFavoriteCard(quote, favoritesContainer);
-//   });
+window.addEventListener('load', init);
 
-// window.addEventListener('load', init);
-
-export { favoriteBtn };
+export { favoriteBtn, setFavorites };
