@@ -21,7 +21,7 @@ const favoriteQuotes = [];
 
 function setCurrentQuote(quote, favorites) {
   currentQuote = { ...quote };
-  if (quote && favorites) {
+  if (currentQuote && favorites) {
     favorites.some((el) => {
       if (el.id === currentQuote.id) {
         currentQuote.isFavorite = true;
@@ -34,66 +34,35 @@ function setCurrentQuote(quote, favorites) {
   setItem(CURRENT_QUOTE_KEY, currentQuote);
 }
 
+function updFavoritesArr(isFavorite, quote) {
+  if (isFavorite) {
+    favoriteQuotes.push(quote);
+  }
+  if (!isFavorite) {
+    const index = favoriteQuotes.findIndex(
+      (favoriteQuote) => favoriteQuote.id === quote.id,
+    );
+    if (index !== -1) {
+      favoriteQuotes.splice(index, 1);
+    }
+    setItem(CURRENT_QUOTE_KEY, quote);
+  }
+  setItem(FAVORITE_QUOTE_KEY, favoriteQuotes);
+}
+
 function setFavorites(favorites, quote, isFromStorage = false) {
   if (isFromStorage) {
     favorites.forEach((el) => {
-      showFavoriteCard(el, favoritesContainer, favorites);
-      favoriteQuotes.push(el);
+      showFavoriteCard(el, favoritesContainer);
+      updFavoritesArr(true, el);
     });
   } else {
     quote.isFavorite = !quote.isFavorite;
-    toggleFavorite(quote, favoritesContainer, favorites);
-    if (quote.isFavorite) {
-      favorites.push(quote);
-    }
-    if (!quote.isFavorite) {
-      const index = favorites.findIndex(
-        (favoriteQuote) => favoriteQuote.id === quote.id,
-      );
-      if (index !== -1) {
-        favorites.splice(index, 1);
-      }
-    }
-    setItem(FAVORITE_QUOTE_KEY, favorites);
+    toggleFavorite(quote, favoritesContainer);
+    updFavoritesArr(quote.isFavorite, quote);
     setItem(CURRENT_QUOTE_KEY, quote);
   }
 }
-
-// function setCurrentQuote({
-//   quote,
-//   isNew = false,
-//   isFromStorage = false,
-//   shouldToggleIsFavorite = false,
-// }) {
-//   showFavoriteBnt();
-//   if (isNew || isFromStorage) {
-//     currentQuote = { ...quote };
-//     currentQuote.isFavorite = !!favoriteQuotes.find((favoriteQuote) => {
-//       if (favoriteQuote.id === currentQuote.id) {
-//         updateFavoriteButton(currentQuote.isFavorite);
-//       } else {
-//         updateFavoriteButton(currentQuote.isFavorite);
-//       }
-//     });
-//     displayQuote(currentQuote);
-//     setItem(CURRENT_QUOTE_KEY, quote);
-//   } else if (shouldToggleIsFavorite) {
-//     currentQuote.isFavorite = !currentQuote.isFavorite;
-//     updateFavoriteButton(currentQuote.isFavorite);
-//     if (currentQuote.isFavorite) {
-//       favoriteQuotes.push({ ...currentQuote });
-//     } else {
-//       const index = favoriteQuotes.findIndex(
-//         (favoriteQuote) => favoriteQuote.id === quote.id,
-//       );
-//       if (index !== -1) {
-//         favoriteQuotes.splice(index, 1);
-//       }
-//     }
-//     toggleFavorite(currentQuote, setCurrentQuote, favoritesContainer);
-//     setItem(FAVORITE_QUOTE_KEY, favoriteQuotes);
-//   }
-// }
 
 hideFavoriteBnt();
 
@@ -111,14 +80,11 @@ function init() {
   if (currentQuoteFromStorage) {
     setCurrentQuote(currentQuoteFromStorage, favoriteQuoteFromStorage);
   }
-  setFavorites(favoriteQuoteFromStorage, currentQuoteFromStorage, true);
-  // if (favoriteQuoteFromStorage) {
-  //   favoriteQuoteFromStorage.forEach((quote) =>
-  //     showFavoriteCard(quote, favoritesContainer, favoriteQuoteFromStorage),
-  //   );
-  // }
+  if (favoriteQuoteFromStorage) {
+    setFavorites(favoriteQuoteFromStorage, currentQuoteFromStorage, true);
+  }
 }
 
 window.addEventListener('load', init);
 
-export { favoriteBtn, setFavorites };
+export { favoriteBtn, updFavoritesArr };
