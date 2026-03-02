@@ -1,11 +1,13 @@
-import { favoriteBtn, updFavoritesArr } from '../../index.js';
+import { favoriteBtn, setFavorites } from '../../index.js';
+import { setItem } from '../utils/localStorage.js';
 
 function toggleFavorite(quote, container) {
   if (quote.isFavorite) {
     showFavoriteCard(quote, container);
     updateFavoriteButton(quote.isFavorite);
+    setItem('currentQuote', quote);
   } else {
-    hideFavoriteCard(quote.id);
+    hideFavoriteCard(quote);
   }
 }
 
@@ -32,21 +34,21 @@ function showFavoriteCard(quote, favoritesContainer) {
       <p class="favorite-card-author">${author}</p>
       <button class="delete-btn">❌</button>`;
   favoritesContainer.appendChild(favoriteCard);
+
   const deleteBtn = favoriteCard.querySelector('.delete-btn');
-  deleteBtn.addEventListener('click', () => {
-    quote.isFavorite = false;
-    hideFavoriteCard(id);
-    updFavoritesArr(false, quote);
-  });
+  deleteBtn.addEventListener('click', () => setFavorites(quote));
 }
 
-function hideFavoriteCard(id) {
-  const card = document.querySelector(`.favorite-card[data-quote-id="${id}"]`);
+function hideFavoriteCard(quote) {
+  const card = document.querySelector(
+    `.favorite-card[data-quote-id="${quote.id}"]`,
+  );
   card && card.remove();
   const currentQuoteId = document.querySelector(`[data-current-quote-id]`)
     .dataset.currentQuoteId;
-  if (id === +currentQuoteId) {
+  if (quote.id === +currentQuoteId) {
     updateFavoriteButton(false);
+    setItem('currentQuote', quote);
   }
 }
 

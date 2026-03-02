@@ -45,29 +45,27 @@ function updFavoritesArr(isFavorite, quote) {
     if (index !== -1) {
       favoriteQuotes.splice(index, 1);
     }
-    setItem(CURRENT_QUOTE_KEY, quote);
   }
   setItem(FAVORITE_QUOTE_KEY, favoriteQuotes);
 }
 
-function setFavorites(favorites, quote, isFromStorage = false) {
+function setFavorites(quoteOrFavorites, isFromStorage = false) {
   if (isFromStorage) {
-    favorites.forEach((el) => {
+    quoteOrFavorites.forEach((el) => {
       showFavoriteCard(el, favoritesContainer);
       updFavoritesArr(true, el);
     });
   } else {
-    quote.isFavorite = !quote.isFavorite;
-    toggleFavorite(quote, favoritesContainer);
-    updFavoritesArr(quote.isFavorite, quote);
-    setItem(CURRENT_QUOTE_KEY, quote);
+    quoteOrFavorites.isFavorite = !quoteOrFavorites.isFavorite;
+    toggleFavorite(quoteOrFavorites, favoritesContainer);
+    updFavoritesArr(quoteOrFavorites.isFavorite, quoteOrFavorites);
   }
 }
 
 hideFavoriteBnt();
 
 favoriteBtn.addEventListener('click', () => {
-  setFavorites(favoriteQuotes, currentQuote);
+  setFavorites(currentQuote);
 });
 
 generateBtn.addEventListener('click', () =>
@@ -81,10 +79,10 @@ function init() {
     setCurrentQuote(currentQuoteFromStorage, favoriteQuoteFromStorage);
   }
   if (favoriteQuoteFromStorage) {
-    setFavorites(favoriteQuoteFromStorage, currentQuoteFromStorage, true);
+    setFavorites(favoriteQuoteFromStorage, true);
   }
 }
 
 window.addEventListener('load', init);
 
-export { favoriteBtn, updFavoritesArr };
+export { favoriteBtn, setFavorites };
