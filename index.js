@@ -21,6 +21,7 @@ const favoriteQuotes = [];
 
 function setCurrentQuote(quote, favorites) {
   currentQuote = { ...quote };
+  currentQuote.isFavorite = false;
   if (currentQuote && favorites) {
     favorites.some((el) => {
       if (el.id === currentQuote.id) {
