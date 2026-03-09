@@ -17,7 +17,9 @@ function updateFavoriteButton(isFavorite) {
 }
 
 function showFavoriteBnt() {
-  favoriteBtn.style.display = 'inline-block';
+  if (favoriteBtn.style.display === 'none') {
+    favoriteBtn.style.display = 'inline-block';
+  }
 }
 
 function hideFavoriteBnt() {
